@@ -1,0 +1,67 @@
+<?php
+
+class CollatzCalculator {
+    // Calculate the number of iterations to reach 1 in the Collatz sequence
+    public function calculateIterations($number) {
+        $count = 0;
+        while ($number != 1) {
+            $number = ($number % 2 === 0) ? $number / 2 : $number * 3 + 1;
+            $count++;
+        }
+        return $count;
+    }
+}
+
+class RangeAnalyzer {
+    private $collatzCalculator;
+
+    // Constructor initializes a new CollatzCalculator
+    public function __construct() {
+        $this->collatzCalculator = new CollatzCalculator();
+    }
+
+    // Calculate the max and min iterations within a range
+    public function calculateMaxAndMinValues($start, $end) {
+        $maxValue = 0;
+        $minValue = PHP_INT_MAX;
+        $maxNumbers = [];
+        $minNumbers = [];
+        $totalIterations = 0;
+
+        for ($i = $start; $i <= $end; $i++) {
+            $currentIterations = $this->collatzCalculator->calculateIterations($i);
+            $totalIterations += $currentIterations;
+
+            if ($currentIterations > $maxValue) {
+                $maxValue = $currentIterations;
+                $maxNumbers = [$i];
+            } elseif ($currentIterations === $maxValue) {
+                $maxNumbers[] = $i;
+            }
+
+            if ($currentIterations < $minValue) {
+                $minValue = $currentIterations;
+                $minNumbers = [$i];
+            } elseif ($currentIterations === $minValue) {
+                $minNumbers[] = $i;
+            }
+        }
+
+        return [
+            'max_value' => $maxValue,
+            'max_numbers' => $maxNumbers,
+            'min_value' => $minValue,
+            'min_numbers' => $minNumbers,
+            'total_iterations' => $totalIterations
+        ];
+    }
+
+    // Generate a mathematical progression sequence
+    public function mathematicProgression($start, $end, $step) {
+        $sequence = [];
+        for ($i = $start; $i <= $end; $i += $step) {
+            $sequence[] = $i;
+        }
+        return $sequence;
+    }
+}
